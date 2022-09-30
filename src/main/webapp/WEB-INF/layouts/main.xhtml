@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<f:view xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta charset="UTF-8"/>
+        <title>#{titulo}</title>
+        <h:outputStylesheet name="css/primeflex.css"/>
+    </h:head>
+    <h:body>
+        <p:card>
+            <div class="my-2">
+                <f:facet name="title">
+                    <h:outputText value="#{titulo}"/>
+                </f:facet>
+                <ui:insert name="contentpoke"/>
+            </div>
+        </p:card>
+    </h:body>
+</f:view>
+</html>

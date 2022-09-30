@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layouts/main.xhtml">
+
+    <ui:define name="contentpoke">
+        <p:panel header="Developed by QRCristhian">
+            <f:facet name="footer">
+                Consumed of
+                <a href="https://pokeapi.co/" class="text-black-alpha-50">https://pokeapi.co/</a>
+            </f:facet>
+            <h:form>
+                <div class="flex justify-content-between flex-wrap card-container purple-container">
+                    <div class="flex align-items-center justify-content-center w-6rem h-4rem bg-primary-500 font-bold border-round">
+                        <p:commandButton disabled="#{pokemonController.botonAnterior}" value="Anterior" styleClass="ui-button-secondary" icon="pi pi-angle-double-left"
+                                         update="tablaPoke botonAnterior" action="#{pokemonController.anterior}" id="botonAnterior"/>
+                    </div>
+                    <div class="flex align-items-center justify-content-center w-6rem h-4rem bg-primary-500 font-bold border-round">
+                        <p:commandButton value="Siguiente" styleClass="ui-button-secondary mr-2" iconPos="right"
+                           action="#{pokemonController.siguiente}" icon="pi pi-angle-double-right" update="tablaPoke botonAnterior"/>
+                    </div>
+                </div>
+            </h:form>
+            <h:form id="form">
+                <div class="field grid my-3">
+                    <h:outputLabel for="textoBuscar" styleClass="col-fixed" style="max-width: 250px;">Busca tu pokemon favorito!</h:outputLabel>
+                    <div class="flex flex-row flex-wrap card-container blue-container">
+                        <div class="flex align-items-center justify-content-center pr-2">
+                            <p:inputText id="textoBuscar" value="#{pokemonController.txtBuscar}" placeholder="Buscar...." style="min-width: 250px;"/>
+                        </div>
+                        <div class="flex align-items-center justify-content-center">
+                            <p:commandButton icon="pi pi-search" styleClass="ui-button-success"
+                                             onclick="PF('dialogPokemon').show(), PF('intervalBuscar').start()"
+                                             update="datosPokemon"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+            <h:outputText value="No se encontro nigun pokemon" rendered="${empty pokemonController.pokemons}"
+                          styleClass="alert alert-warning"/>
+            <p:dataTable var="pokemon" value="#{pokemonController.pokemons}"
+                         rendered="${not empty pokemonController.pokemons}" rows="5"
+                         paginator="true" paginatorPosition="both"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} de {totalRecords} pokemones"
+                         rowsPerPageTemplate="5,10,{ShowAll|'All'}" id="tablaPoke">
+                <p:column headerText="Id">
+                    <h:outputText value="#{pokemon.id}" styleClass="font-bold"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{pokemon.nombre}"/>
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{pokemon.tipo}"/>
+                </p:column>
+                <p:column headerText="Imagen">
+                    <p:graphicImage url="#{pokemon.imagenUrl}" alt="imagePoke#{pokemon.id}" style="max-width: 100px"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dialogP" header="Y tu pokemon es...." widgetVar="dialogPokemon" showEffect="fade" modal="true" minHeight="200" minWidth="500">
+                <p:ajax event="close" listener="#{pokemonController.reset}" update="datosPokemon"/>
+                <ui:include src="pokemon.xhtml"/>
+            </p:dialog>
+        </p:panel>
+    </ui:define>
+</ui:composition>

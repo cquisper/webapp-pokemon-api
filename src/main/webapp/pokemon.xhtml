@@ -1,0 +1,36 @@
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:f="http://xmlns.jcp.org/jsf/core"
+              xmlns:p="http://primefaces.org/ui">
+
+   <h:outputText value="Buscando tu pokemon....#{pokemonController.tiempo}" id="poketime" rendered="#{pokemonController.tiempo ge 0}"/>
+   <h:outputText value="Lo siento no pude encontrar tu pokemon :c" id="messagePoke"
+                 rendered="#{pokemonController.tiempo le 0 and pokemonController.pokemon.id eq null}"/>
+   <p:poll interval="1" listener="#{pokemonController.buscarPokemon}" update="poketime datosPokemon messagePoke"
+           widgetVar="intervalBuscar" autoStart="false"/>
+   <p:card id="datosPokemon" rendered="#{pokemonController.tiempo le 0 and pokemonController.pokemon.id != null}">
+      <f:facet name="header">
+         <p:graphicImage url="#{pokemonController.pokemon.imagenUrl}" alt="poke-#{pokemonController.pokemon.id}" style="max-width: 200px;"/>
+      </f:facet>
+      <f:facet name="title">
+         <h:outputText value="#{pokemonController.pokemon.nombre}"/>
+      </f:facet>
+      <div class="field grid">
+         <div class="col">
+            <h:outputText value="#Id" styleClass="font-bold"/>
+         </div>
+         <div class="col">
+            <h:outputText value="#{pokemonController.pokemon.id}"/>
+         </div>
+      </div>
+      <div class="field grid">
+         <div class="col">
+            <h:outputText value="Tipo" styleClass="font-bold"/>
+         </div>
+         <div class="col">
+            <h:outputText value="#{pokemonController.pokemon.tipo}" styleClass="capitalize"/>
+         </div>
+      </div>
+   </p:card>
+</ui:component>
